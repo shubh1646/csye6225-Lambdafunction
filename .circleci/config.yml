@@ -22,12 +22,12 @@ jobs:
     - run:
         name: Zip Artifact
         command: |
-          cd codedeploy_artifact
           zip index.js.zip index.js
 
     - run:
         name: Upload LambdaFunction to S3
         command: |
+          cd codedeploy_artifact
           aws s3 cp index.js.zip s3://${AWS_CODE_DEPLOY_BUCKET}
 #    - run:
 #        name: Update lambdaFunction code
