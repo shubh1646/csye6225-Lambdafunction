@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/python:3.6.1
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+
+    - run:
+        name: install dependencies
+        command: |
+          python3 -m venv venv
+          . venv/bin/activate
+
+    - run:
+        name: install awscli
+        command: sudo pip install awscli
+
+    - run:
+        name: Zip Artifact
+        command: |
+          zip index.zip index.js
+
+    - run:
+        name: Upload LambdaFunction to S3
+        command: |
+          aws s3 cp index.zip s3://${S3_BUCKET_ADDR}/index.zip
+
+    - run:
+        name: Update lambdaFunction code
+        command: |
+          aws lambda update-function-code --function-name my-Function --region us-east-1 --zip-file fileb://index.zip

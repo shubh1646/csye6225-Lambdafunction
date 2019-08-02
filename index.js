@@ -1,0 +1,74 @@
+const AWS = require("aws-sdk");
+const dynamo = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
+const crypto = require("crypto");
+var ses = new AWS.SES({
+    region: 'us-east-1'
+});
+
+exports.handler = (event, context, callback) => {
+    var searchParams = {
+        Key: {
+            id: event.Records[0].Sns.Message
+        },
+        TableName: 'csye6225'
+    };
+    dynamo.get(searchParams, function (error, code) {
+        var resp = JSON.stringify(code);
+        if (error) {
+            console.log("Error",error);
+        }
+        else {
+            if (Object.keys(code).length >= 0) {
+                var flag = false;
+                if(code.Item == undefined){flag = true;}else
+                    if(code.Item.TTL < (new Date).getTime()){flag = true;}
+                if(flag){
+                    var expirationTime = (new Date).getTime() + (1000 * 60 * 2);
+                    var params = {
+                        Item: {
+                            id: event.Records[0].Sns.Message,
+                            token: crypto.randomBytes(16).toString("hex"),
+                            TTL: expirationTime
+                        },
+                        TableName: 'csye6225'
+                    };
+
+                    dynamo.put(params, function (err, data) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            callback(null, data);
+                            var id = params.Item.token;
+                            var cParams = {
+                                Destination: {
+                                    ToAddresses: event.Records[0].Sns.Message
+                                },
+                                Message: {
+                                    Body: {
+                                        Text: {
+                                            Data: "http://"+process.env.domainName+"/reset?email="+username+"&token="+id
+                                        }
+                                    },
+                                    Subject: {
+                                        Data: "Password Reset Request URL"
+                                    }
+                                },
+                                Source: "info@"+process.env.domainName
+                            };
+                            ses.sendEmail(cParams, function (err, data) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                else {
+                                    console.log("EMAIL SENT");
+                                    context.succeed(event);
+                                }
+                            });
+                        }
+                    });
+                }
+            } else
+                console.log(code, "User exists");
+        }
+    });
+};
