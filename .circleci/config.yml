@@ -22,6 +22,7 @@ jobs:
     - run:
         name: Zip Artifact
         command: |
+          cd codedeploy_artifact
           zip index.js.zip index.js
 
     - run:
