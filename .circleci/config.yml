@@ -27,9 +27,9 @@ jobs:
     - run:
         name: Upload LambdaFunction to S3
         command: |
-          aws s3 cp index.zip s3://${S3_BUCKET_ADDR}/index.zip
+          aws s3 cp index.zip s3://${AWS_CODE_DEPLOY_BUCKET}/index.zip
 
     - run:
         name: Update lambdaFunction code
         command: |
-          aws lambda update-function-code --function-name my-Function --region us-east-1 --zip-file fileb://index.zip
+          aws lambda update-function-code --function-name my-Function --region us-east-1 --zip-file file://index.zip

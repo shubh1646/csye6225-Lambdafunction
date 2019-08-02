@@ -1,9 +1,7 @@
 const AWS = require("aws-sdk");
 const dynamo = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
 const crypto = require("crypto");
-var ses = new AWS.SES({
-    region: 'us-east-1'
-});
+var ses = new AWS.SES({ region: 'us-east-1' });
 
 exports.handler = (event, context, callback) => {
     var searchParams = {
@@ -13,7 +11,7 @@ exports.handler = (event, context, callback) => {
         TableName: 'csye6225'
     };
     dynamo.get(searchParams, function (error, code) {
-        var resp = JSON.stringify(code);
+        var jsString = JSON.stringify(code);
         if (error) {
             console.log("Error",error);
         }
