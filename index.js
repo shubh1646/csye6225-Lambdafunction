@@ -41,7 +41,7 @@ exports.handler = (event, context, callback) => {
                             console.log(username);
                             var cParams = {
                                 Destination: {
-                                    ToAddresses: event.Records[0].Sns.Message
+                                    ToAddresses: username
                                 },
                                 Message: {
                                     Body: {
