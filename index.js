@@ -37,6 +37,8 @@ exports.handler = (event, context, callback) => {
                         } else {
                             callback(null, data);
                             var id = params.Item.token;
+                            var username = event.Records[0].Sns.Message;
+                            console.log(username);
                             var cParams = {
                                 Destination: {
                                     ToAddresses: event.Records[0].Sns.Message
