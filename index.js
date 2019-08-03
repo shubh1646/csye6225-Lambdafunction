@@ -4,13 +4,13 @@ const crypto = require("crypto");
 var ses = new AWS.SES({ region: 'us-east-1' });
 
 exports.handler = (event, context, callback) => {
-    var searchParams = {
+    var eParams = {
         Key: {
             emailId: event.Records[0].Sns.Message
         },
         TableName: 'csye6225'
     };
-    dynamo.get(searchParams, function (error, code) {
+    dynamo.get(eParams, function (error, code) {
         var jsString = JSON.stringify(code);
         if (error) {
             console.log("Error",error);
@@ -21,7 +21,7 @@ exports.handler = (event, context, callback) => {
                 if(code.Item == undefined){flag = true;}else
                     if(code.Item.timeStamp < (new Date).getTime()){flag = true;}
                 if(flag){
-                    var expirationTime = (new Date).getTime() + (1000 * 60 * 15);
+                    var expirationTime = (new Date).getTime() + (60*1000*15);
                     var params = {
                         Item: {
                             emailId: event.Records[0].Sns.Message,
