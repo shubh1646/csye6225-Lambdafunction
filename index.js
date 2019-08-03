@@ -46,14 +46,14 @@ exports.handler = (event, context, callback) => {
                                 Message: {
                                     Body: {
                                         Text: {
-                                            Data: "http://"+process.env.domainName+"/reset?email="+username+"&token="+id
+                                            Data: "http://"+process.env.domain+"/reset?email="+username+"&token="+id
                                         }
                                     },
                                     Subject: {
                                         Data: "Password Reset Request URL"
                                     }
                                 },
-                                Source: "info@"+process.env.domainName
+                                Source: "info@"+process.env.domain
                             };
                             ses.sendEmail(cParams, function (err, data) {
                                 if (err) {
