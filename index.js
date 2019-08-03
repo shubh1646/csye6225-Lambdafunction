@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
+const dynamoDB = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
 const crypto = require("crypto");
 var ses = new AWS.SES({ region: 'us-east-1' });
 
@@ -10,7 +10,7 @@ exports.handler = (event, context, callback) => {
         },
         TableName: 'csye6225'
     };
-    dynamo.get(eParams, function (error, code) {
+    dynamoDB.get(eParams, function (error, code) {
         var jsString = JSON.stringify(code);
         if (error) {
             console.log("Error",error);
@@ -31,7 +31,7 @@ exports.handler = (event, context, callback) => {
                         TableName: 'csye6225'
                     };
 
-                    dynamo.put(params, function (err, data) {
+                    dynamoDB.put(params, function (err, data) {
                         if (err) {
                             callback(err, null);
                         } else {
