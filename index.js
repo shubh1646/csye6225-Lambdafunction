@@ -21,7 +21,7 @@ exports.handler = (event, context, callback) => {
                 if(code.Item == undefined){flag = true;}else
                     if(code.Item.timeStamp < (new Date).getTime()){flag = true;}
                 if(flag){
-                    var expirationTime = (new Date).getTime() + (1000 * 60 * 2);
+                    var expirationTime = (new Date).getTime() + (1000 * 60 * 15);
                     var params = {
                         Item: {
                             emailId: event.Records[0].Sns.Message,
