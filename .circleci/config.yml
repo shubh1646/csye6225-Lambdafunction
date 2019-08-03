@@ -32,4 +32,4 @@ jobs:
     - run:
         name: Update lambdaFunction code
         command: |
-          aws lambda update-function-code --function-name csye6225 --region us-east-1 --zip-file file://index.zip
+          aws lambda update-function-code --function-name csye6225 --region us-east-1 --zip-file fileb://index.zip
