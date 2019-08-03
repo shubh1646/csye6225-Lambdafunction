@@ -8,7 +8,7 @@ exports.handler = (event, context, callback) => {
         Key: {
             emailId: event.Records[0].Sns.Message
         },
-        table: 'csye6225'
+        TableName: 'csye6225'
     };
     dynamo.get(searchParams, function (error, code) {
         var jsString = JSON.stringify(code);
@@ -28,7 +28,7 @@ exports.handler = (event, context, callback) => {
                             token: crypto.randomBytes(16).toString("hex"),
                             timeStamp: expirationTime
                         },
-                        table: 'csye6225'
+                        TableName: 'csye6225'
                     };
 
                     dynamo.put(params, function (err, data) {
@@ -42,7 +42,7 @@ exports.handler = (event, context, callback) => {
                             console.log(id);
                             var cParams = {
                                 Destination: {
-                                    ToAddresses: username
+                                    ToAddresses: [username]
                                 },
                                 Message: {
                                     Body: {
